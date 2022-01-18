@@ -31,7 +31,10 @@ def cloudflare():
         if date in entry["updated"]:  # filter out entries that are not from today
             issues.append(entry["title"])
             issues.append(entry["link"])
-    return str(issues)
+    if issues != []:
+        return str(issues)
+    else:
+        return "All systems operational"
 
 
 def google_cloud():
@@ -41,9 +44,28 @@ def google_cloud():
     for entry in feed["entries"]:
         issues.append(entry["title"])
         issues.append(entry["link"])
-    return str(issues)
+    if issues != []:
+        return str(issues)
+    else:
+        return "All systems operational"
+
+
+def voipms():
+    link = "https://status.voip.ms/history.rss"
+    feed = feedparser.parse(link)
+    issues = []
+    date = datetime.utcnow().strftime('%Y-%m-%d')  # voip.ms uses UTC
+    for entry in feed["entries"]:
+        if date in entry["updated"]:  # filter out entries that are not from today
+            issues.append(entry["title"])
+            issues.append(entry["link"])
+    if issues != []:
+        return str(issues)
+    else:
+        return "All systems operational"
 
 
 print("### AWS STATUS ### \n" + aws() + "\n")
 print("### CLOUDFLARE STATUS ### \n" + cloudflare() + "\n")
-print("### GOOGLE CLOUD STATUS ### \n" + google_cloud())
+print("### GOOGLE CLOUD STATUS ### \n" + google_cloud() + "\n")
+print("### VOIP.MS STATUS ### \n" + voipms() + "\n")
