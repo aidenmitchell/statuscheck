@@ -36,9 +36,29 @@ def generic_rss(link):
         return "All systems operational"
 
 
+def google_cloud():
+    link = "https://status.cloud.google.com/"
+    html = requests.get(link).text
+    soup = BeautifulSoup(html, "html.parser")
+
+    messages = soup.find("div", {'class': 'banner'})
+    feed = feedparser.parse("https://status.cloud.google.com/en/feed.atom")
+    issues = []
+    date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
+    for entry in feed["entries"]:
+        if date in entry["updated"]:  # filter out entries that are not from today
+            issues.append(entry["title"])
+            issues.append(entry["link"])
+    if issues:
+        return str(issues)
+    elif messages:
+        return str(messages.text)
+    else:
+        return "All systems operational"
+
+
 def cloudflare():
-    link = "https://www.cloudflarestatus.com/history.atom"
-    feed = feedparser.parse(link)
+    feed = feedparser.parse("https://www.cloudflarestatus.com/history.atom")
     issues = []
     date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
     for entry in feed["entries"]:
@@ -65,6 +85,6 @@ def freshservice():
 
 print("### AWS STATUS ### \n" + aws() + "\n")
 print("### CLOUDFLARE STATUS ### \n" + cloudflare() + "\n")
-print("### GOOGLE CLOUD STATUS ### \n" + generic_rss("https://status.cloud.google.com/en/feed.atom") + "\n")
+print("### GOOGLE CLOUD STATUS ### \n" + google_cloud() + "\n")
 print("### VOIP.MS STATUS ### \n" + generic_rss("https://status.voip.ms/history.rss") + "\n")
 print("### FRESHSERVICE STATUS ### \n" + freshservice() + "\n")
