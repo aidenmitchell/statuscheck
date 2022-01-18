@@ -69,12 +69,11 @@ def freshservice():
     link = "https://updates.freshservice.com/"
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
-    print(soup.prettify())
 
-    status = soup.findAll("script", {'id': '__NEXT_DATA__'})
+    status = soup.find("script", {'id': '__NEXT_DATA__'})
     print(status)
-    if status.text != "All Services Operational":
-        return status.text
+    if "All Services Operational" not in status:
+        return status
     else:
         return "All systems operational"
 
