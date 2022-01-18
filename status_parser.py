@@ -8,7 +8,7 @@ import re
 def aws():
     link = "https://aws-status.info/"
     html = requests.get(link).text
-    soup = BeautifulSoup(html, "lxml")
+    soup = BeautifulSoup(html, "html.parser")
 
     regions = ["North America", "South America", "Europe", "Asia Pacific"]
     statuses = soup.findAll("span", {'class': 'label'})
@@ -25,7 +25,7 @@ def cloudflare():
     link = "https://www.cloudflarestatus.com/history.atom"
     feed = feedparser.parse(link)
     issues = []
-    date = datetime.today().strftime('%Y-%m-%d')
+    date = datetime.utcnow().strftime('%Y-%m-%d')  # cloudflare uses UTC
     for entry in feed["entries"]:
         if date in entry["updated"]:
             issues.append(entry["title"])
