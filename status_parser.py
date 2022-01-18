@@ -6,7 +6,8 @@ import json
 
 
 def aws():
-    link = "https://aws-status.info/"
+    # aws has rss feeds, but only for each service, so scraping is needed to get an overview
+    link = "https://aws-status.info/"  # this website is better than AWS's status page
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
 
@@ -23,6 +24,8 @@ def aws():
 
 
 def generic_rss(link):
+    # should be used for all rss feeds that don't have a specific function like voip.ms
+    # example link: https://status.voip.ms/history.rss
     feed = feedparser.parse(link)
     issues = []
     date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
@@ -37,11 +40,13 @@ def generic_rss(link):
 
 
 def google_cloud():
+    # combines status from their rss feed and their website
+    # because Google doesn't publish all incidents in their rss feed :(
     link = "https://status.cloud.google.com/"
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
 
-    messages = soup.find("div", {'class': 'banner'})
+    messages = soup.find("div", {'class': 'banner'})  # get banner text
     feed = feedparser.parse("https://status.cloud.google.com/en/feed.atom")
     issues = []
     date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
@@ -49,15 +54,16 @@ def google_cloud():
         if date in entry["updated"]:  # filter out entries that are not from today
             issues.append(entry["title"])
             issues.append(entry["link"])
-    if issues:
+    if issues:  # return rss incidents first
         return str(issues)
-    elif messages:
+    elif messages:  # return page banner if no rss incidents
         return str(messages.text)
-    else:
+    else:  # return "All systems operational" if no incidents
         return "All systems operational"
 
 
 def cloudflare():
+    # cloudflare includes resolved incidents in their rss feed, so they get their own function
     feed = feedparser.parse("https://www.cloudflarestatus.com/history.atom")
     issues = []
     date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
@@ -71,6 +77,7 @@ def cloudflare():
 
 
 def freshservice():
+    # freshservice doesn't have a rss feed, so they get their own function
     link = "https://updates.freshservice.com/"
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
