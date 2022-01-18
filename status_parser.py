@@ -15,10 +15,11 @@ def aws():
     messages = soup.findAll("span", {'class': 'message'})
 
     for region in regions:
-        if statuses[regions.index(region)].text != "All services are operating normally":
+        if statuses[regions.index(region)].text != "All services are operating normally":  # if any service is not
+            # operating normally
             return ("Issue in " + region + ": " + statuses[regions.index(region)].text + "\nIssue: " + messages[
-                0].text)
-    return "All services are operating normally"
+                0].text)  # return the first issue
+    return "All services are operating normally"  # if all services are operating normally
 
 
 def cloudflare():
@@ -27,14 +28,14 @@ def cloudflare():
     issues = []
     date = datetime.utcnow().strftime('%Y-%m-%d')  # cloudflare uses UTC
     for entry in feed["entries"]:
-        if date in entry["updated"]:
+        if date in entry["updated"]:  # filter out entries that are not from today
             issues.append(entry["title"])
             issues.append(entry["link"])
     return str(issues)
 
 
 def google_cloud():
-    link = "https://status.cloud.google.com/en/feed.atom"
+    link = "https://status.cloud.google.com/en/feed.atom"  # no date filtering needed, they only return current status
     feed = feedparser.parse(link)
     issues = []
     for entry in feed["entries"]:
