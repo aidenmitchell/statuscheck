@@ -65,7 +65,22 @@ def voipms():
         return "All systems operational"
 
 
+def freshservice():
+    link = "https://updates.freshservice.com/"
+    html = requests.get(link).text
+    soup = BeautifulSoup(html, "html.parser")
+    print(soup.prettify())
+
+    status = soup.findAll("script", {'id': '__NEXT_DATA__'})
+    print(status)
+    if status.text != "All Services Operational":
+        return status.text
+    else:
+        return "All systems operational"
+
+
 print("### AWS STATUS ### \n" + aws() + "\n")
 print("### CLOUDFLARE STATUS ### \n" + cloudflare() + "\n")
 print("### GOOGLE CLOUD STATUS ### \n" + google_cloud() + "\n")
 print("### VOIP.MS STATUS ### \n" + voipms() + "\n")
+print("### FRESHSERVICE STATUS ### \n" + freshservice() + "\n")
