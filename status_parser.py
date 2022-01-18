@@ -94,8 +94,8 @@ def freshservice():
         return "All systems operational"
 
 
-print("### AWS STATUS ### \n" + aws() + "\n")
-print("### CLOUDFLARE STATUS ### \n" + cloudflare() + "\n")
-print("### GOOGLE CLOUD STATUS ### \n" + google_cloud() + "\n")
-print("### VOIP.MS STATUS ### \n" + generic_rss("https://status.voip.ms/history.rss") + "\n")
-print("### FRESHSERVICE STATUS ### \n" + freshservice() + "\n")
+# print("### AWS STATUS ### \n" + aws() + "\n")
+# print("### CLOUDFLARE STATUS ### \n" + cloudflare() + "\n")
+# print("### GOOGLE CLOUD STATUS ### \n" + google_cloud() + "\n")
+# print("### VOIP.MS STATUS ### \n" + generic_rss("https://status.voip.ms/history.rss") + "\n")
+# print("### FRESHSERVICE STATUS ### \n" + freshservice() + "\n")
