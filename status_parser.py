@@ -11,6 +11,7 @@ def aws():
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
 
+    keywords = ["aws", "amazon web services"]  # for future implementation of subreddit monitoring
     regions = ["North America", "South America", "Europe", "Asia Pacific"]
     statuses = soup.findAll("span", {'class': 'label'})
     messages = soup.findAll("span", {'class': 'message'})
@@ -46,6 +47,7 @@ def google_cloud():
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
 
+    keywords = ["google", "cloud", "google cloud", "google cloud platform", "google cloud services"]
     messages = soup.find("div", {'class': 'banner'})  # get banner text
     feed = feedparser.parse("https://status.cloud.google.com/en/feed.atom")
     issues = []
@@ -65,10 +67,11 @@ def google_cloud():
 def cloudflare():
     # cloudflare includes resolved incidents in their rss feed, so they get their own function
     feed = feedparser.parse("https://www.cloudflarestatus.com/history.atom")
+    keywords = ["cloudflare", "cloudflare status"]
     issues = []
     date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
     for entry in feed["entries"]:
-        if "resolved" in entry["content"][0]["value"]:  # if the latest entry is resolved
+        if "resolved" in entry["content"][0]["value"]:  # if the latest entry is resolved, everything is fine
             return "All systems operational"
         elif date in entry["updated"]:  # ensure that the entry is from today
             issues.append(entry["title"])
@@ -81,6 +84,7 @@ def freshservice():
     link = "https://updates.freshservice.com/"
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
+    keywords = ["freshservice", "freshservice status", "freshstatus"]
 
     web_json = soup.find("script", {'id': '__NEXT_DATA__'}).string  # get json data from the page
     status = json.loads(web_json)["props"]["pageProps"]["accountDetails"]["branding_data"]["topBandText"]  # get status
