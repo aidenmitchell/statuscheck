@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import feedparser
 from datetime import datetime
 import json
+import re
 
 
 def aws():
@@ -21,10 +22,10 @@ def aws():
             # operating normally
             return ("AWS: Issue in " + region + ": " + statuses[regions.index(region)].text + "\nIssue: " + messages[
                 0].text)  # return the first issue
-    return "AWS: All systems operational"  # if all services are operating normally
+    return "AWS: All systems operational"  + "\n" + reddit_search(keywords) # if all services are operating normally
 
 
-def generic_rss(link, service_name):
+def generic_rss(link, service_name, keywords):
     # should be used for all rss feeds that don't have a specific function like voip.ms
     # example link: https://status.voip.ms/history.rss
     feed = feedparser.parse(link)
@@ -37,7 +38,7 @@ def generic_rss(link, service_name):
     if issues:
         return service_name + str(issues)
     else:
-        return service_name + ": All systems operational"
+        return service_name + ": All systems operational" + "\n" + reddit_search(keywords)
 
 
 def google_cloud():
@@ -47,7 +48,7 @@ def google_cloud():
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
 
-    keywords = ["google", "cloud", "google cloud", "google cloud platform", "google cloud services"]
+    keywords = ["google", "google cloud", "google cloud platform", "google cloud services"]
     messages = soup.find("div", {'class': 'banner'})  # get banner text
     feed = feedparser.parse("https://status.cloud.google.com/en/feed.atom")
     issues = []
@@ -61,7 +62,7 @@ def google_cloud():
     elif messages:  # return page banner if no rss incidents
         return "Google Cloud: " + str(messages.text)
     else:  # return "All systems operational" if no incidents
-        return "Google Cloud: All systems operational"
+        return "Google Cloud: All systems operational" + "\n" + reddit_search(keywords)
 
 
 def cloudflare():
@@ -72,7 +73,7 @@ def cloudflare():
     date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
     for entry in feed["entries"]:
         if "resolved" in entry["content"][0]["value"]:  # if the latest entry is resolved, everything is fine
-            return "Cloudflare: All systems operational"
+            return "Cloudflare: All systems operational" + "\n" + reddit_search(keywords)
         elif date in entry["updated"]:  # ensure that the entry is from today
             issues.append(entry["title"])
             issues.append(entry["link"])
@@ -91,20 +92,31 @@ def freshservice():
     if "All Services Operational" not in status:
         return "Freshservice: " + str(status)
     else:
-        return "Freshservice: All systems operational"
+        return "Freshservice: All systems operational" + "\n" + reddit_search(keywords)
 
 
-# def all_statuses():
-#     statuses = [aws(), cloudflare(), google_cloud(), freshservice(), generic_rss("https://status.voip.ms/history.rss", "voip.ms")]
-#     print(statuses)
-#     for status in statuses:
-#         if "All systems operational" not in status:
-#             return "Incident - " + status
-#     return "All systems operational"
+def reddit_search(keywords):
+    rss_feed = "https://www.reddit.com/r/sysadmin/new.rss"
+    feed = feedparser.parse(rss_feed)
+    posts = []
+    for entry in feed["entries"]:
+        # print(entry["content"][0]["value"])
+        for keyword in keywords:
+            if keyword in entry["content"][0]["value"] or keyword in entry["title"]:
+                posts.append(entry["title"] + ": " + entry["link"])
+                # print(keyword + entry["title"] + ": " + entry["link"])
+    return str(len(posts)) + " mentions on r/sysadmin"
 
 
-# print("### AWS STATUS ### \n" + aws() + "\n")
-# print("### CLOUDFLARE STATUS ### \n" + cloudflare() + "\n")
-# print("### GOOGLE CLOUD STATUS ### \n" + google_cloud() + "\n")
-# print("### VOIP.MS STATUS ### \n" + generic_rss("https://status.voip.ms/history.rss") + "\n")
-# print("### FRESHSERVICE STATUS ### \n" + freshservice() + "\n")
+def outage_search(keywords):
+    rss_feed = "https://www.reddit.com/r/sysadmin/new.rss"
+    feed = feedparser.parse(rss_feed)
+    posts = []
+    for entry in feed["entries"]:
+        # print(entry["content"][0]["value"])
+        for keyword in keywords:
+            if keyword in entry["content"][0]["value"] or keyword in entry["title"]:
+                posts.append(entry["title"] + ": " + entry["link"])
+                # print(keyword + entry["title"] + ": " + entry["link"])
+    return len(posts)
+
