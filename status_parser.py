@@ -115,7 +115,8 @@ def outage_search(keywords):
     for entry in feed["entries"]:
         # print(entry["content"][0]["value"])
         for keyword in keywords:
-            if keyword in entry["title"]:
+            if re.search(re.escape(keyword), entry["title"]):
+            # if keyword in entry["title"]:
                 posts.append([entry["title"], entry["link"]])
     return posts
 
