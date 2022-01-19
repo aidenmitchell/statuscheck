@@ -5,13 +5,14 @@ import time
 
 
 def get_info():
-    global aws, cloudflare, google_cloud, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions
+    global aws, cloudflare, google_cloud, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages
     aws = status_parser.aws()
     cloudflare = status_parser.cloudflare()
     google_cloud = status_parser.google_cloud()
     freshservice = status_parser.freshservice()
     voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms", ["voip.ms"])
-    outage_mentions = status_parser.outage_search(["outage", "down"])
+    outages = status_parser.outage_search(["outage", "down"])
+    outage_mentions = len(status_parser.outage_search(["outage", "down"]))
     ping_hosts = ['1.1.1.1', '8.8.8.8', 'dc01', 'dc02']
     ping = internet_check.multi_ping(ping_hosts)
 
@@ -40,7 +41,15 @@ def refresh():
     window['refresh3'].update(freshservice)
     window['refresh4'].update(voipms)
     window['refresh6'].update(str(outage_mentions) + " mentions of outages on r/sysadmin")
-    window['refresh5'].update(values=ping)
+    window['refresh5'].update(ping)
+    window['refresh7'].update(outages)
+
+
+def refresh_constant():
+    while True:
+        refresh()
+        window['done'].update('Refreshed at ' + time.strftime("%H:%M:%S"))
+        time.sleep(30)
 
 
 # sg.theme('DarkAmber')   # Add a touch of color
@@ -53,16 +62,20 @@ layout = [[Gui.Text(title, key='refresh', background_color=bg_color)],
           [Gui.Text(freshservice, key='refresh3')],
           [Gui.Text(voipms, key='refresh4')],
           [Gui.Text(str(outage_mentions) + " mentions of outages on r/sysadmin", key='refresh6')],
-          [Gui.Table(values=ping, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, key='refresh5')],
+          [Gui.Table(ping, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, key='refresh5')],
+          [Gui.Table(outages, headings=["Title", "Link"], hide_vertical_scroll=True, enable_click_events=True, auto_size_columns=True, max_col_width=30, key='refresh7')],
           [Gui.Button('Refresh')], [Gui.Text("", key='done')]]
 
 # Create the Window
-window = Gui.Window('Statuses', layout)
+window = Gui.Window('Statuses', layout, auto_size_text=True)
 # Event Loop to process "events" and get the "values" of the inputs
+window.perform_long_operation(refresh_constant, 'done')
 while True:
     event, values = window.read()
     if event == 'Refresh':
         window.perform_long_operation(refresh, 'done')
+    elif isinstance(event, tuple):
+        print(event[2])
     elif event == 'done':
         window['done'].update('Refreshed at ' + time.strftime("%H:%M:%S"))
     elif event == Gui.WIN_CLOSED:  # if user closes window or clicks cancel

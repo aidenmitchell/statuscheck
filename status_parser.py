@@ -48,7 +48,7 @@ def google_cloud():
     html = requests.get(link).text
     soup = BeautifulSoup(html, "html.parser")
 
-    keywords = ["google", "google cloud", "google cloud platform", "google cloud services"]
+    keywords = ["google cloud", "google cloud platform", "google cloud services"]
     messages = soup.find("div", {'class': 'banner'})  # get banner text
     feed = feedparser.parse("https://status.cloud.google.com/en/feed.atom")
     issues = []
@@ -115,8 +115,7 @@ def outage_search(keywords):
     for entry in feed["entries"]:
         # print(entry["content"][0]["value"])
         for keyword in keywords:
-            if keyword in entry["content"][0]["value"] or keyword in entry["title"]:
-                posts.append(entry["title"] + ": " + entry["link"])
-                # print(keyword + entry["title"] + ": " + entry["link"])
-    return len(posts)
+            if keyword in entry["title"]:
+                posts.append([entry["title"], entry["link"]])
+    return posts
 
