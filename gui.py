@@ -8,12 +8,17 @@ cloudflare = status_parser.cloudflare()
 google_cloud = status_parser.google_cloud()
 freshservice = status_parser.freshservice()
 voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms")
+ping_hosts = ['1.1.1.1', '8.8.8.8', 'dc01', 'dc02']
+ping = internet_check.multi_ping(ping_hosts)
 
 statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
 for status in statuses:
     if "All systems operational" not in status:
         title = "Incident - " + status
         bg_color = 'red'
+    elif any('0' in x for x in ping):
+        title = "Unable to reach host"
+        bg_color = 'orange'
     else:
         title = "All systems operational"
         bg_color = 'green'
@@ -25,12 +30,16 @@ def refresh():
     google_cloud = status_parser.google_cloud()
     freshservice = status_parser.freshservice()
     voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms")
+    ping = internet_check.multi_ping(ping_hosts)
 
     statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
     for status in statuses:
         if "All systems operational" not in status:
             title = "Incident - " + status
             bg_color = 'red'
+        elif any('0' in x for x in ping):
+            title = "Unable to reach host"
+            bg_color = 'orange'
         else:
             title = "All systems operational"
             bg_color = 'green'
@@ -40,7 +49,7 @@ def refresh():
     window['refresh2'].update(google_cloud)
     window['refresh3'].update(freshservice)
     window['refresh4'].update(voipms)
-    window['refresh5'].update(values=internet_check.multi_ping(['1.1.1.1', '8.8.8.8']))
+    window['refresh5'].update(values=ping)
 
 # sg.theme('DarkAmber')   # Add a touch of color
 # All the stuff inside your window.
@@ -50,8 +59,7 @@ layout = [[Gui.Text(title, key='refresh', background_color=bg_color)],
           [Gui.Text(google_cloud, key='refresh2')],
           [Gui.Text(freshservice, key='refresh3')],
           [Gui.Text(voipms, key='refresh4')],
-          # [Gui.Text("Ping: " + internet_check.multi_ping(['1.1.1.1', '8.8.8.8']), key='refresh5')],
-          [Gui.Table(values=internet_check.multi_ping(['1.1.1.1', '8.8.8.8']), headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, key='refresh5')],
+          [Gui.Table(values=ping, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, key='refresh5')],
           [Gui.Button('Refresh')], [Gui.Text("", key='done')]]
 
 # Create the Window

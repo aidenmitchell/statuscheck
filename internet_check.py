@@ -3,7 +3,7 @@ from ping3 import ping
 
 def pinger(host):
     ping_time = ping(host)
-    return str(ping_time * 1000)[0:5]  # in ms
+    return str(ping_time * 1000)[0:3]  # in ms
 
 
 def multi_ping(hosts):
