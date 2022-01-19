@@ -10,10 +10,4 @@ def multi_ping(hosts):
     ping_results = {}
     for host in hosts:
         ping_results[host] = pinger(host)
-    return ping_results
-
-
-results = multi_ping(['1.1.1.1', '8.8.8.8'])
-print(results)
-for host, result in results.items():
-    print(f'{host} {result} ms')
+    return str(ping_results)
