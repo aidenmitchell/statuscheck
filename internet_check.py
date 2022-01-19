@@ -11,4 +11,4 @@ def multi_ping(hosts):
     for host in hosts:
         result = pinger(host)
         ping_results.append([host, result])
-    return ping_results
+    return ping_results  # return list of hosts and ping times

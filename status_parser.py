@@ -102,7 +102,7 @@ def reddit_search(keywords):
     for entry in feed["entries"]:
         # print(entry["content"][0]["value"])
         for keyword in keywords:
-            if keyword in entry["content"][0]["value"] or keyword in entry["title"]:
+            if keyword in entry["content"][0]["value"] or keyword in entry["title"]:  # if keyword in post
                 posts.append(entry["title"] + ": " + entry["link"])
                 # print(keyword + entry["title"] + ": " + entry["link"])
     return str(len(posts)) + " mentions on r/sysadmin"
@@ -113,10 +113,7 @@ def outage_search(keywords):
     feed = feedparser.parse(rss_feed)
     posts = []
     for entry in feed["entries"]:
-        # print(entry["content"][0]["value"])
         for keyword in keywords:
-            if re.search(re.escape(keyword), entry["title"]):
-            # if keyword in entry["title"]:
+            if re.search(re.escape(keyword), entry["title"]):  # regex to filter out non-whole keywords
                 posts.append([entry["title"], entry["link"]])
-    return posts
-
+    return posts  # return list of titles and links
