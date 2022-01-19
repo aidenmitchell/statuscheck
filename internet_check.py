@@ -7,7 +7,8 @@ def pinger(host):
 
 
 def multi_ping(hosts):
-    ping_results = {}
+    ping_results = []
     for host in hosts:
-        ping_results[host] = pinger(host)
-    return str(ping_results)
+        result = pinger(host)
+        ping_results.append([host, result])
+    return ping_results

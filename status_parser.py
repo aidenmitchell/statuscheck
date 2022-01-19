@@ -94,12 +94,13 @@ def freshservice():
         return "Freshservice: All systems operational"
 
 
-def all_statuses():
-    statuses = [aws(), cloudflare(), google_cloud(), freshservice(), generic_rss("https://status.voip.ms/history.rss", "voip.ms")]
-    for status in statuses:
-        if "All systems operational" not in status:
-            return "Incident - " + status
-    return "All systems operational"
+# def all_statuses():
+#     statuses = [aws(), cloudflare(), google_cloud(), freshservice(), generic_rss("https://status.voip.ms/history.rss", "voip.ms")]
+#     print(statuses)
+#     for status in statuses:
+#         if "All systems operational" not in status:
+#             return "Incident - " + status
+#     return "All systems operational"
 
 
 # print("### AWS STATUS ### \n" + aws() + "\n")
