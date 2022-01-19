@@ -3,33 +3,14 @@ import internet_check
 import PySimpleGUI as Gui
 import time
 
-aws = status_parser.aws()
-cloudflare = status_parser.cloudflare()
-google_cloud = status_parser.google_cloud()
-freshservice = status_parser.freshservice()
-voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms")
-ping_hosts = ['1.1.1.1', '8.8.8.8', 'dc01', 'dc02']
-ping = internet_check.multi_ping(ping_hosts)
-
-statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
-for status in statuses:
-    if "All systems operational" not in status:
-        title = "Incident - " + status
-        bg_color = 'red'
-    elif any('0' in x for x in ping):
-        title = "Unable to reach host"
-        bg_color = 'orange'
-    else:
-        title = "All systems operational"
-        bg_color = 'green'
-
-
-def refresh():
+def get_info():
+    global aws, cloudflare, google_cloud, freshservice, voipms, ping, statuses, title, bg_color
     aws = status_parser.aws()
     cloudflare = status_parser.cloudflare()
     google_cloud = status_parser.google_cloud()
     freshservice = status_parser.freshservice()
     voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms")
+    ping_hosts = ['1.1.1.1', '8.8.8.8', 'dc01', 'dc02']
     ping = internet_check.multi_ping(ping_hosts)
 
     statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
@@ -43,6 +24,10 @@ def refresh():
         else:
             title = "All systems operational"
             bg_color = 'green'
+
+
+def refresh():
+    get_info()
     window['refresh'].update(title, background_color=bg_color)
     window['refresh0'].update(aws)
     window['refresh1'].update(cloudflare)
@@ -53,6 +38,7 @@ def refresh():
 
 # sg.theme('DarkAmber')   # Add a touch of color
 # All the stuff inside your window.
+get_info()
 layout = [[Gui.Text(title, key='refresh', background_color=bg_color)],
           [Gui.Text(aws, key='refresh0')],
           [Gui.Text(cloudflare, key='refresh1')],
