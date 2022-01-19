@@ -1,6 +1,7 @@
 # statuscheck
 
 Functions to check the various statuses of online services, will eventually include a GUI.
+This is programmed pretty badly, but it works.
 
 ## status_parser.py
 
