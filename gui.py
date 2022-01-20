@@ -69,7 +69,7 @@ layout = [[Gui.Text(title, font=15, key='refresh', background_color=bg_color)],
           [Gui.Table(ping, font=15, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, num_rows=4, key='refresh5')],  # ping table
           [Gui.Text(str(outage_mentions) + " mentions of outages on r/sysadmin", font=15, key='refresh6')],  # outage mentions
           [Gui.Table(outages, headings=["Title", "Link (click to open)"], font=15, hide_vertical_scroll=True, enable_click_events=True, auto_size_columns=True, max_col_width=35, key='refresh7')],  # outages table
-          [Gui.Button('Refresh', font=15)], [Gui.Text("", key='done')]]  # refresh button
+          [Gui.Button('Refresh', font=15)], [Gui.Text("", key='done', font=15)]]  # refresh button
 
 # Create the Window
 window = Gui.Window('Statuses', layout, auto_size_text=True)
