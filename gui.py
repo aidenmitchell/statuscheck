@@ -53,7 +53,7 @@ def refresh():
 def refresh_constant():
     while True:  # refresh every 60 seconds
         refresh()
-        window['done'].update('Refreshed at ' + time.strftime("%H:%M:%S"))  # update the refresh time
+        window['done'].update('Refreshed at ' + time.strftime("%r"))  # update the refresh time
         time.sleep(30)
 
 
@@ -88,7 +88,7 @@ while True:
         except:
             pass
     elif event == 'done':
-        window['done'].update('Refreshed at ' + time.strftime("%H:%M:%S"))
+        window['done'].update('Refreshed at ' + time.strftime("%r"))
     elif event == Gui.WIN_CLOSED:  # if user closes window or clicks cancel
         break
 
