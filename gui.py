@@ -19,7 +19,6 @@ def get_info():
 
     statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
     for status in statuses:
-        print(status)
         if "All systems operational" not in status:  # if a service reports a non-operational status
             title = "Incident - " + status
             bg_color = 'red'
