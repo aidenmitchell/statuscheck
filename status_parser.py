@@ -41,6 +41,15 @@ def generic_rss(link, service_name, keywords):
         return service_name + ": All systems operational" + "\n" + reddit_search(keywords)
 
 
+def microsoft():
+    feed = feedparser.parse("https://nitter.net/MSFT365Status/rss")
+    keywords = ["microsoft", "microsoft 365", "o365", "office 365", "microsoft online", "ms"]
+    if "issue" in feed["entries"][0]["title"]:
+        return "Microsoft 365: " + str(feed["entries"][0]["title"])
+    else:
+        return "Microsoft 365: All systems operational" + "\n" + reddit_search(keywords)
+
+
 def google_cloud():
     # combines status from their rss feed and their website
     # because Google doesn't publish all incidents in their rss feed :(
@@ -102,7 +111,7 @@ def reddit_search(keywords):
     for entry in feed["entries"]:
         # print(entry["content"][0]["value"])
         for keyword in keywords:
-            if keyword in entry["content"][0]["value"] or keyword in entry["title"]:  # if keyword in post
+            if re.search(re.escape(keyword), entry["content"][0]["value"]) or re.search(re.escape(keyword), entry["title"]):  # regex to filter out non-whole keywords
                 posts.append(entry["title"] + ": " + entry["link"])
                 # print(keyword + entry["title"] + ": " + entry["link"])
     return str(len(posts)) + " mentions on r/sysadmin"

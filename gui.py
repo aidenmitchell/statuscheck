@@ -6,10 +6,11 @@ import webbrowser
 
 
 def get_info():
-    global aws, cloudflare, google_cloud, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages
+    global aws, cloudflare, google_cloud, microsoft, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages
     aws = status_parser.aws()
     cloudflare = status_parser.cloudflare()
     google_cloud = status_parser.google_cloud()
+    microsoft = status_parser.microsoft()
     freshservice = status_parser.freshservice()
     voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms", ["voip.ms"])
     outages = status_parser.outage_search(["outage", "down"])
@@ -43,6 +44,7 @@ def refresh():
     window['refresh0'].update(aws)
     window['refresh1'].update(cloudflare)
     window['refresh2'].update(google_cloud)
+    window['refresh8'].update(microsoft)
     window['refresh3'].update(freshservice)
     window['refresh4'].update(voipms)
     window['refresh6'].update(str(outage_mentions) + " mentions of outages on r/sysadmin")
@@ -64,6 +66,7 @@ layout = [[Gui.Text(title, font=15, key='refresh', background_color=bg_color)],
           [Gui.Text(aws, font=15, key='refresh0')],
           [Gui.Text(cloudflare, font=15, key='refresh1')],
           [Gui.Text(google_cloud, font=15, key='refresh2')],
+          [Gui.Text(microsoft, font=15, key='refresh8')],
           [Gui.Text(freshservice, font=15, key='refresh3')],
           [Gui.Text(voipms, font=15, key='refresh4')],
           [Gui.Table(ping, font=15, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, num_rows=4, key='refresh5')],  # ping table
