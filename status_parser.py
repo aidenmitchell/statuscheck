@@ -58,7 +58,7 @@ def google_cloud():
             issues.append(entry["title"])
             issues.append(entry["link"])
     if issues:  # return rss incidents first
-        return "Google Cloud: " + str(issues)
+        return "Google Cloud: " + str(issues[0])
     elif messages:  # return page banner if no rss incidents
         return "Google Cloud: " + str(messages.text)
     else:  # return "All systems operational" if no incidents
@@ -77,7 +77,7 @@ def cloudflare():
         elif date in entry["updated"]:  # ensure that the entry is from today
             issues.append(entry["title"])
             issues.append(entry["link"])
-    return "Cloudflare: " + str(issues)
+    return "Cloudflare: " + str(issues[0])
 
 
 def freshservice():
