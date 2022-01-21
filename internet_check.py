@@ -3,7 +3,7 @@ from ping3 import ping
 
 def pinger(host):
     ping_time = ping(host)
-    if ping_time == 0:
+    if ping_time is None:
         return str(ping_time)
     return str(round(ping_time * 1000, 2))  # in ms
 
