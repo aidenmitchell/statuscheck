@@ -75,7 +75,7 @@ layout = [[Gui.Text(title, font=15, key='refresh', background_color=bg_color)],
           [Gui.Button('Refresh', font=15)], [Gui.Text("", key='done', font=15)]]  # refresh button
 
 # Create the Window
-window = Gui.Window('Statuses', layout, auto_size_text=True)
+window = Gui.Window('Statuses', layout, auto_size_text=True, keep_on_top=True, resizable=True)
 # Event Loop to process "events" and get the "values" of the inputs
 window.perform_long_operation(refresh_constant, 'done')  # start the 1 minute refresh
 while True:
