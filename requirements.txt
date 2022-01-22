@@ -1,0 +1,5 @@
+PySimpleGUI>=4.56.0
+requests>=2.27.1
+feedparser>=6.0.8
+beautifulsoup4>=4.10.0
+ping3>=3.0.2
