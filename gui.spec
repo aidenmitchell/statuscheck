@@ -5,7 +5,6 @@ block_cipher = None
 
 
 a = Analysis(['gui.py'],
-             pathex=['/Users/aidenmitchell/weather/statuscheck/lib/python3.10/site-packages'],
              binaries=[],
              datas=[],
              hiddenimports=[],
