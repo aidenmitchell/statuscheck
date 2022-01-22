@@ -1,27 +1,9 @@
 # statuscheck
+[![Package Application with Pyinstaller](https://github.com/aidenmitchell/statuscheck/actions/workflows/main.yml/badge.svg)](https://github.com/aidenmitchell/statuscheck/actions/workflows/main.yml)
 
-Functions to check the various statuses of online services, will eventually include a GUI.
+A GUI to check the various statuses of online services
 This is programmed pretty badly, but it works.
 
-## status_parser.py
+You can download the latest .exe from the Github Action artifacts, or create an executable yourself.
 
-Pulls the system status directly from the vendor's status page.
-Currently includes:
- - AWS
- - Cloudflare
- - Freshservice
- - Google Cloud
- - Any other generic RSS status feed
- 
-Will include:
- - Monitoring of Twitter feeds for status
- - Monitoring of subreddits for status (measure mentions of a specific service to detect downtime before it is posted on their status page)
-
-## internet_check.py
-
-Pings various internet services and returns their ping time.
-Example output:
-```
-1.1.1.1 6.046 ms
-8.8.8.8 9.032 ms
-```
+![image](https://user-images.githubusercontent.com/30846409/150653229-c791bd58-1567-44f1-b6c4-68146f9207d0.png)
