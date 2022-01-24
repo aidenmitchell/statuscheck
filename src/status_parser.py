@@ -81,10 +81,10 @@ def cloudflare():
     soup = BeautifulSoup(html, "html.parser")
     keywords = ["cloudflare"]
     status = soup.find("a", {'class': 'actual-title'})  # get banner text
-    if "All Services Operational" not in status.text:
-        return "Cloudflare: " + str(status.text)
-    else:
+    if status is None:
         return "Cloudflare: All systems operational" + "\n" + reddit_search(keywords)
+    elif "All Services Operational" not in status.text:
+        return "Cloudflare: " + str(status.text)
 
 
 def freshservice():
