@@ -75,18 +75,16 @@ def google_cloud():
 
 
 def cloudflare():
-    # cloudflare includes resolved incidents in their rss feed, so they get their own function
-    feed = feedparser.parse("https://www.cloudflarestatus.com/history.atom")
-    keywords = ["cloudflare", "cloudflare status"]
-    issues = []
-    date = datetime.utcnow().strftime('%Y-%m-%d')  # most rss feeds use UTC
-    for entry in feed["entries"]:
-        if "resolved" in entry["content"][0]["value"]:  # if the latest entry is resolved, everything is fine
-            return "Cloudflare: All systems operational" + "\n" + reddit_search(keywords)
-        elif date in entry["updated"]:  # ensure that the entry is from today
-            issues.append(entry["title"])
-            issues.append(entry["link"])
-    return "Cloudflare: " + str(issues[0])
+    # cloudflare's rss feed is hard to parse, so scraping is needed
+    link = "https://www.cloudflarestatus.com/"
+    html = requests.get(link).text
+    soup = BeautifulSoup(html, "html.parser")
+    keywords = ["cloudflare"]
+    status = soup.find("a", {'class': 'actual-title'})  # get banner text
+    if "All Services Operational" not in status.text:
+        return "Cloudflare: " + str(status.text)
+    else:
+        return "Cloudflare: All systems operational" + "\n" + reddit_search(keywords)
 
 
 def freshservice():
