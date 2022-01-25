@@ -6,13 +6,14 @@ import webbrowser
 
 
 def get_info():
-    global aws, cloudflare, google_cloud, microsoft, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages
+    global aws, cloudflare, google_cloud, microsoft, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages, reddit
     aws = status_parser.aws()
     cloudflare = status_parser.cloudflare()
     google_cloud = status_parser.google_cloud()
     microsoft = status_parser.microsoft()
     freshservice = status_parser.freshservice()
     voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms", ["voip.ms"])
+    reddit = status_parser.generic_rss("https://www.redditstatus.com/history.rss", "Reddit", ["Reddit"])
     outages = status_parser.outage_search(["outage", "down"])
     outage_mentions = len(status_parser.outage_search(["outage", "down"]))  # outage keywords
     ping_hosts = ['1.1.1.1', '8.8.8.8']  # ping hosts
@@ -47,6 +48,7 @@ def refresh():
     window['refresh8'].update(microsoft)
     window['refresh3'].update(freshservice)
     window['refresh4'].update(voipms)
+    window['refresh9'].update(reddit)
     window['refresh6'].update(str(outage_mentions) + " mentions of outages on r/sysadmin")
     window['refresh5'].update(ping)
     window['refresh7'].update(outages)
@@ -69,6 +71,7 @@ layout = [[Gui.Text(title, font=15, key='refresh', background_color=bg_color)],
           [Gui.Text(microsoft, font=15, key='refresh8')],
           [Gui.Text(freshservice, font=15, key='refresh3')],
           [Gui.Text(voipms, font=15, key='refresh4')],
+          [Gui.Text(reddit, font=15, key='refresh9')],
           [Gui.Table(ping, font=15, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, num_rows=4, key='refresh5')],  # ping table
           [Gui.Text(str(outage_mentions) + " mentions of outages on r/sysadmin", font=15, key='refresh6')],  # outage mentions
           [Gui.Table(outages, headings=["Title", "Link (click to open)"], font=15, hide_vertical_scroll=True, enable_click_events=True, auto_size_columns=True, max_col_width=35, key='refresh7')],  # outages table
