@@ -41,6 +41,17 @@ def generic_rss(link, service_name, keywords):
         return service_name + ": All systems operational" + "\n" + reddit_search(keywords)
 
 
+def statuspage(link, service_name, keywords):  # for any pages using Atlassian Statuspage
+    page = link
+    html = requests.get(page).text
+    soup = BeautifulSoup(html, "html.parser")
+    status = soup.find("a", {'class': 'actual-title'})  # get banner text
+    if status is None:
+        return service_name + ": All systems operational" + "\n" + reddit_search(keywords)
+    elif "All Services Operational" not in status.text:
+        return service_name + ": " + str(status.text)
+
+
 def microsoft():
     feed = feedparser.parse("https://nitter.net/MSFT365Status/rss")
     keywords = ["microsoft", "microsoft 365", "o365", "office 365", "microsoft online", "ms"]
@@ -72,19 +83,6 @@ def google_cloud():
         return "Google Cloud: " + str(messages.text)
     else:  # return "All systems operational" if no incidents
         return "Google Cloud: All systems operational" + "\n" + reddit_search(keywords)
-
-
-def cloudflare():
-    # cloudflare's rss feed is hard to parse, so scraping is needed
-    link = "https://www.cloudflarestatus.com/"
-    html = requests.get(link).text
-    soup = BeautifulSoup(html, "html.parser")
-    keywords = ["cloudflare"]
-    status = soup.find("a", {'class': 'actual-title'})  # get banner text
-    if status is None:
-        return "Cloudflare: All systems operational" + "\n" + reddit_search(keywords)
-    elif "All Services Operational" not in status.text:
-        return "Cloudflare: " + str(status.text)
 
 
 def freshservice():

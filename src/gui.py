@@ -8,15 +8,15 @@ import webbrowser
 def get_info():
     global aws, cloudflare, google_cloud, microsoft, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages, reddit
     aws = status_parser.aws()
-    cloudflare = status_parser.cloudflare()
+    cloudflare = status_parser.statuspage("https://cloudflarestatus.com", "Cloudflare", ["Cloudflare"])
     google_cloud = status_parser.google_cloud()
     microsoft = status_parser.microsoft()
     freshservice = status_parser.freshservice()
     voipms = status_parser.generic_rss("https://status.voip.ms/history.rss", "voip.ms", ["voip.ms"])
-    reddit = status_parser.generic_rss("https://www.redditstatus.com/history.rss", "Reddit", ["Reddit"])
+    reddit = status_parser.statuspage("https://redditstatus.com", "Reddit", ["Reddit"])
     outages = status_parser.outage_search(["outage", "down"])
     outage_mentions = len(status_parser.outage_search(["outage", "down"]))  # outage keywords
-    ping_hosts = ['1.1.1.1', '8.8.8.8']  # ping hosts
+    ping_hosts = ['1.1.1.1', '1.0.0.1', '8.8.8.8']  # ping hosts
     ping = internet_check.multi_ping(ping_hosts)
 
     statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
