@@ -16,7 +16,7 @@ def get_info():
     reddit = status_parser.statuspage("https://redditstatus.com", "Reddit", ["Reddit"])
     outages = status_parser.outage_search(["outage", "down"])
     outage_mentions = len(status_parser.outage_search(["outage", "down"]))  # outage keywords
-    ping_hosts = ['1.1.1.1', '1.0.0.1', '8.8.8.8']  # ping hosts
+    ping_hosts = ['8.8.8.8']  # ping hosts
     ping = internet_check.multi_ping(ping_hosts)
 
     statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
