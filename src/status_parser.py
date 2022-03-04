@@ -56,7 +56,7 @@ def microsoft():
     feed = feedparser.parse("https://nitter.net/MSFT365Status/rss")
     keywords = ["microsoft", "microsoft 365", "o365", "office 365", "microsoft online", "ms"]
     try:
-        if "issue" in feed["entries"][0]["title"]:
+        if "issue" in feed["entries"][0]["title"] and "mitigated" not in feed["entries"][0]["title"] or "resolved" not in feed["entries"][0]["title"]:
             return "Microsoft 365: " + str(feed["entries"][0]["title"])
         else:
             return "Microsoft 365: All systems operational" + "\n" + reddit_search(keywords)
