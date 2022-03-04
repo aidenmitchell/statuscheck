@@ -7,22 +7,26 @@ import re
 
 
 def aws():
-    # aws has rss feeds, but only for each service, so scraping is needed to get an overview
-    link = "https://aws-status.info/"  # this website is better than AWS's status page
-    html = requests.get(link).text
-    soup = BeautifulSoup(html, "html.parser")
+    try:
+        # aws has rss feeds, but only for each service, so scraping is needed to get an overview
+        link = "https://aws-status.info/"  # this website is better than AWS's status page
+        html = requests.get(link).text
+        soup = BeautifulSoup(html, "html.parser")
 
-    keywords = ["aws", "amazon web services"]  # for future implementation of subreddit monitoring
-    regions = ["North America", "South America", "Europe", "Asia Pacific"]
-    statuses = soup.findAll("span", {'class': 'label'})
-    messages = soup.findAll("span", {'class': 'message'})
+        keywords = ["aws", "amazon web services"]  # for future implementation of subreddit monitoring
+        regions = ["North America", "South America", "Europe", "Asia Pacific"]
+        statuses = soup.findAll("span", {'class': 'label'})
+        messages = soup.findAll("span", {'class': 'message'})
 
-    for region in regions:
-        if statuses[regions.index(region)].text != "All services are operating normally":  # if any service is not
-            # operating normally
-            return ("AWS: Issue in " + region + ": " + statuses[regions.index(region)].text + "\nIssue: " + messages[
-                0].text)  # return the first issue
-    return "AWS: All systems operational"  + "\n" + reddit_search(keywords) # if all services are operating normally
+        for region in regions:
+            if statuses[regions.index(region)].text != "All services are operating normally":  # if any service is not
+                # operating normally
+                return ("AWS: Issue in " + region + ": " + statuses[regions.index(region)].text + "\nIssue: " + messages[
+                    0].text)  # return the first issue
+        return "AWS: All systems operational"  + "\n" + reddit_search(keywords) # if all services are operating normally
+    except requests.exceptions.ConnectionError:
+        return "AWS: Unable to connect to AWS status page"
+
 
 
 def generic_rss(link, service_name, keywords):
