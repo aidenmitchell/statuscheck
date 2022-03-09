@@ -4,7 +4,7 @@ import PySimpleGUI as Gui
 import time
 import webbrowser
 
-font_size = 12
+font_size = 8
 
 
 def get_info():
