@@ -4,8 +4,7 @@ import PySimpleGUI as Gui
 import time
 import webbrowser
 
-font_size = 8
-
+font_size = ('Arial', 12)
 
 def get_info():
     global aws, cloudflare, google_cloud, microsoft, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages, reddit
