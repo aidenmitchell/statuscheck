@@ -105,7 +105,7 @@ def freshservice():
             return "Freshservice: " + str(status)
         else:
             return "Freshservice: All systems operational" + "\n" + reddit_search(keywords)
-    except requests.exceptions.ConnectionError:
+    except (requests.exceptions.ConnectionError, KeyError):
         return "Freshservice: Unable to connect to status page"
 
 
