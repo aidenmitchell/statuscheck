@@ -24,7 +24,7 @@ def get_info():
     for status in statuses:
         if "All systems operational" not in status:  # if a service reports a non-operational status
             title = "Incident - " + status
-            bg_color = 'red'
+            bg_color = '#eb4034'  # red
             break
         elif any('0' in x for x in ping):  # if a host does not respond to ping
             title = "Unable to reach host"

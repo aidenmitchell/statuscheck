@@ -86,7 +86,7 @@ def google_cloud():
     if issues:  # return rss incidents first
         return "Google Cloud: " + str(issues[0])
     elif messages:  # return page banner if no rss incidents
-        return "Google Cloud: " + str(messages.text)
+        return "Google Cloud: " + str.rstrip(messages.text)
     else:  # return "All systems operational" if no incidents
         return "Google Cloud: All systems operational" + "\n" + reddit_search(keywords)
 
