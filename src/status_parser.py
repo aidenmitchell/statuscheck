@@ -19,8 +19,7 @@ def aws():
         messages = soup.findAll("span", {'class': 'message'})
 
         for region in regions:
-            if statuses[regions.index(region)].text != "All services are operating normally":  # if any service is not
-                # operating normally
+            if statuses[regions.index(region)].text != "All services are operating normally" and "RESOLVED" not in messages[0].text:  # if any service is not operating normally
                 return ("AWS: Issue in " + region + ": " + statuses[regions.index(region)].text + "\nIssue: " + messages[
                     0].text)  # return the first issue
         return "AWS: All systems operational"  + "\n" + reddit_search(keywords) # if all services are operating normally
@@ -93,18 +92,21 @@ def google_cloud():
 
 
 def freshservice():
-    # freshservice doesn't have a rss feed, so they get their own function
-    link = "https://updates.freshservice.com/"
-    html = requests.get(link).text
-    soup = BeautifulSoup(html, "html.parser")
-    keywords = ["freshservice", "freshservice status", "freshstatus"]
+    try:
+        # freshservice doesn't have a rss feed, so they get their own function
+        link = "https://updates.freshservice.com/"
+        html = requests.get(link).text
+        soup = BeautifulSoup(html, "html.parser")
+        keywords = ["freshservice", "freshservice status", "freshstatus"]
 
-    web_json = soup.find("script", {'id': '__NEXT_DATA__'}).string  # get json data from the page
-    status = json.loads(web_json)["props"]["pageProps"]["accountDetails"]["branding_data"]["topBandText"]  # get status
-    if "All Services Operational" not in status:
-        return "Freshservice: " + str(status)
-    else:
-        return "Freshservice: All systems operational" + "\n" + reddit_search(keywords)
+        web_json = soup.find("script", {'id': '__NEXT_DATA__'}).string  # get json data from the page
+        status = json.loads(web_json)["props"]["pageProps"]["accountDetails"]["branding_data"]["topBandText"]  # get status
+        if "All Services Operational" not in status:
+            return "Freshservice: " + str(status)
+        else:
+            return "Freshservice: All systems operational" + "\n" + reddit_search(keywords)
+    except requests.exceptions.ConnectionError:
+        return "Freshservice: Unable to connect to status page"
 
 
 def reddit_search(keywords):
