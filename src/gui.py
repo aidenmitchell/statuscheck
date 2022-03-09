@@ -4,6 +4,8 @@ import PySimpleGUI as Gui
 import time
 import webbrowser
 
+font_size = 12
+
 
 def get_info():
     global aws, cloudflare, google_cloud, microsoft, freshservice, voipms, ping, statuses, title, bg_color, outage_mentions, outages, reddit
@@ -64,18 +66,18 @@ def refresh_constant():
 # sg.theme('DarkAmber')   # Add a touch of color
 # All the stuff inside your window.
 get_info()
-layout = [[Gui.Text(title, font=15, key='refresh', background_color=bg_color)],
-          [Gui.Text(aws, font=15, key='refresh0')],
-          [Gui.Text(cloudflare, font=15, key='refresh1')],
-          [Gui.Text(google_cloud, font=15, key='refresh2')],
-          [Gui.Text(microsoft, font=15, key='refresh8')],
-          [Gui.Text(freshservice, font=15, key='refresh3')],
-          [Gui.Text(voipms, font=15, key='refresh4')],
-          [Gui.Text(reddit, font=15, key='refresh9')],
-          [Gui.Table(ping, font=15, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, num_rows=4, key='refresh5')],  # ping table
-          [Gui.Text(str(outage_mentions) + " mentions of outages on r/sysadmin", font=15, key='refresh6')],  # outage mentions
-          [Gui.Table(outages, headings=["Title", "Link (click to open)"], font=15, hide_vertical_scroll=True, enable_click_events=True, auto_size_columns=True, max_col_width=35, key='refresh7')],  # outages table
-          [Gui.Button('Refresh', font=15)], [Gui.Text("", key='done', font=15)]]  # refresh button
+layout = [[Gui.Text(title, font=font_size, key='refresh', background_color=bg_color)],
+          [Gui.Text(aws, font=font_size, key='refresh0')],
+          [Gui.Text(cloudflare, font=font_size, key='refresh1')],
+          [Gui.Text(google_cloud, font=font_size, key='refresh2')],
+          [Gui.Text(microsoft, font=font_size, key='refresh8')],
+          [Gui.Text(freshservice, font=font_size, key='refresh3')],
+          [Gui.Text(voipms, font=font_size, key='refresh4')],
+          [Gui.Text(reddit, font=font_size, key='refresh9')],
+          [Gui.Table(ping, font=font_size, headings=["Host", "Ping (ms)"], auto_size_columns=True, hide_vertical_scroll=True, num_rows=4, key='refresh5')],  # ping table
+          [Gui.Text(str(outage_mentions) + " mentions of outages on r/sysadmin", font=font_size, key='refresh6')],  # outage mentions
+          [Gui.Table(outages, headings=["Title", "Link (click to open)"], font=font_size, hide_vertical_scroll=True, enable_click_events=True, auto_size_columns=True, max_col_width=35, key='refresh7')],  # outages table
+          [Gui.Button('Refresh', font=font_size)], [Gui.Text("", key='done', font=font_size)]]  # refresh button
 
 # Create the Window
 window = Gui.Window('Statuses', layout, auto_size_text=True, keep_on_top=True, resizable=True)
