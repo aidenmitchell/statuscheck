@@ -20,7 +20,7 @@ def get_info():
     ping_hosts = ['8.8.8.8']  # ping hosts
     ping = internet_check.multi_ping(ping_hosts)
 
-    statuses = [aws, cloudflare, google_cloud, freshservice, voipms]
+    statuses = [aws, cloudflare, google_cloud, freshservice, voipms, reddit]
     for status in statuses:
         if "All systems operational" not in status:  # if a service reports a non-operational status
             title = "Incident - " + status
