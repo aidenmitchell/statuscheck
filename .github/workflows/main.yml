@@ -1,5 +1,5 @@
 
-name: Package Application with Pyinstaller
+name: Create .exe
 
 on:
   push:
