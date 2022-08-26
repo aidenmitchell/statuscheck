@@ -57,12 +57,12 @@ def statuspage(link, service_name, keywords):  # for any pages using Atlassian S
 
 def microsoft():
     feed = feedparser.parse("https://nitter.net/MSFT365Status/rss")
-    keywords = ["microsoft", "microsoft 365", "o365", "office 365", "microsoft online", "ms"]
+    keywords = ["microsoft", "microsoft 365", "o365", "office 365", "microsoft online", "ms", "m365"]
     try:
-        if "mitigated" in feed["entries"][0]["title"] or "resolved" in feed["entries"][0]["title"]:
-            return "Microsoft 365: All systems operational" + "\n" + reddit_search(keywords)
-        else:
+        if "investigating" in feed["entries"][0]["title"] or "addressing" in feed["entries"][0]["title"]:
             return "Microsoft 365: " + str(feed["entries"][0]["title"])
+        else:
+            return "Microsoft 365: All systems operational" + "\n" + reddit_search(keywords)
     except IndexError:
         return "Microsoft 365: All systems operational" + "\n" + reddit_search(keywords)
 
